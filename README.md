@@ -29,7 +29,7 @@ $ docker-compose up -d
 $ docker-compose run web python manage.py migrate
 ```
 
-После этого API будет доступна http://127.0.0.1:8000/
+После этого API будет доступна на http://127.0.0.1:8000/
 
 ## Authors
 
