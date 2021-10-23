@@ -34,3 +34,4 @@ $ docker-compose run web python manage.py migrate
 ## Authors
 
 * **Artemowkin** - https://github.com/artemowkin/
+* **steelWinds** - https://github.com/steelWinds/
