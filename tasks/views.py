@@ -18,7 +18,7 @@ class AllCreateTasksView(APIView):
         if serializer.is_valid():
             new_task = services.create_task(request.user, serializer.data)
             serialized_task = self.serializer_class(new_task).data
-            return Response(serialized_task)
+            return Response(serialized_task, status=201)
 
         return Response(serializer.errors, status=400)
 
