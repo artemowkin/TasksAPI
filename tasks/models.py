@@ -2,6 +2,10 @@ from uuid import uuid4
 from datetime import datetime
 
 from django.db import models
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 
 class Task(models.Model):
@@ -9,6 +13,10 @@ class Task(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=255)
     text = models.TextField()
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='tasks', default=1,
+        editable=False
+    )
     pub_datetime = models.DateTimeField(auto_now_add=True)
 
     class Meta:

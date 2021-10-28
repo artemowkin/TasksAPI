@@ -9,14 +9,14 @@ class AllCreateTasksView(APIView):
     serializer_class = TaskSerializer
 
     def get(self, request):
-        all_tasks = services.get_all_tasks()
+        all_tasks = services.get_all_tasks(request.user)
         serialized_tasks = self.serializer_class(all_tasks, many=True).data
         return Response(serialized_tasks)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            new_task = services.create_task(serializer.data)
+            new_task = services.create_task(request.user, serializer.data)
             serialized_task = self.serializer_class(new_task).data
             return Response(serialized_task)
 
@@ -26,6 +26,6 @@ class AllCreateTasksView(APIView):
 class DeleteTaskView(APIView):
 
     def delete(self, request, pk):
-        services.delete_task(pk)
+        services.delete_task(request.user, pk)
         return Response(status=204)
 

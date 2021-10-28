@@ -4,7 +4,7 @@ from .models import Task
 
 
 @admin.register(Task)
-class TaskModel(admin.ModelAdmin):
-    list_fields = ('title', 'subtitle')
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('title', 'subtitle', 'owner')
     search_fields = ('title', 'subtitle')
 

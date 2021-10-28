@@ -2,20 +2,24 @@ from uuid import UUID
 
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 from .models import Task
 
 
-def get_all_tasks() -> QuerySet:
-    return Task.objects.all()
+User = get_user_model()
 
 
-def create_task(data: dict) -> Task:
-    task = Task.objects.create(**data)
+def get_all_tasks(user: User) -> QuerySet:
+    return Task.objects.filter(owner=user)
+
+
+def create_task(user: User, data: dict) -> Task:
+    task = Task.objects.create(owner=user, **data)
     return task
 
 
-def delete_task(pk: UUID) -> None:
-    task = get_object_or_404(Task, pk=pk)
+def delete_task(user: User, pk: UUID) -> None:
+    task = get_object_or_404(Task, pk=pk, owner=user)
     task.delete()
 
