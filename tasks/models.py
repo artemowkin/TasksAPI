@@ -14,8 +14,7 @@ class Task(models.Model):
     subtitle = models.CharField(max_length=255)
     text = models.TextField()
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='tasks', default=1,
-        editable=False
+        User, on_delete=models.CASCADE, related_name='tasks', editable=False
     )
     pub_datetime = models.DateTimeField(auto_now_add=True)
 
