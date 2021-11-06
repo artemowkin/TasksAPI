@@ -23,7 +23,13 @@ class AllCreateTasksView(APIView):
         return Response(serializer.errors, status=400)
 
 
-class DeleteTaskView(APIView):
+class ConcreteTaskView(APIView):
+    serializer_class = TaskSerializer
+
+    def get(self, request, pk):
+        task = services.get_concrete_task(request.user, pk)
+        serialized_task = self.serializer_class(task).data
+        return Response(serialized_task)
 
     def delete(self, request, pk):
         services.delete_task(request.user, pk)

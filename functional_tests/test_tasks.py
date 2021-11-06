@@ -110,3 +110,13 @@ class TasksEndpointsTests(TestCase):
         response = self.client.delete(f'/tasks/{self.task.pk}/')
         self.assertEqual(response.status_code, 404)
 
+    def test_get_concrete_task(self):
+        response = self.client.get(f'/tasks/{self.task.pk}/')
+        self.assertEqual(response.status_code, 200)
+        json_response = response.json()
+        self.assertEqual(json_response['pk'], str(self.task.pk))
+        self.assertEqual(json_response['title'], self.task.title)
+        self.assertEqual(json_response['subtitle'], self.task.subtitle)
+        self.assertEqual(json_response['text'], self.task.text)
+        self.assertEqual(json_response['owner'], self.task.owner.id)
+

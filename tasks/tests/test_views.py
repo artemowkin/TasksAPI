@@ -28,7 +28,7 @@ class AllCreateTasksViewTests(TestCase):
         self.assertEqual(response.status_code, 201)
 
 
-class DeleteTaskViewTests(TestCase):
+class ConcreteTaskViewTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
@@ -40,9 +40,15 @@ class DeleteTaskViewTests(TestCase):
             text='some text', owner=self.user
         )
 
+    def test_get(self):
+        response = self.client.get(
+            reverse('concrete_task', args=[str(self.task.pk)])
+        )
+        self.assertEqual(response.status_code, 200)
+
     def test_delete(self):
         response = self.client.delete(reverse(
-            'delete_task', args=[str(self.task.pk)]
+            'concrete_task', args=[str(self.task.pk)]
         ))
         self.assertEqual(response.status_code, 204)
 

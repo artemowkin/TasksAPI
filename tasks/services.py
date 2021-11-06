@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
@@ -32,9 +32,15 @@ def create_task(user: User, data: dict) -> Task:
     return task
 
 
-def delete_task(user: User, pk: UUID) -> None:
-    """Delete user task"""
+def get_concrete_task(user: User, pk: UUID) -> Task:
+    """Get a concrete task using its pk"""
     _check_is_user_authenticated(user)
     task = get_object_or_404(Task, pk=pk, owner=user)
+    return task
+
+
+def delete_task(user: User, pk: UUID) -> None:
+    """Delete user task"""
+    task = get_concrete_task(user, pk)
     task.delete()
 

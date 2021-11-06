@@ -6,7 +6,9 @@ from django.http import Http404
 from rest_framework.exceptions import ValidationError
 
 from ..models import Task
-from ..services import get_all_tasks, create_task, delete_task
+from ..services import (
+    get_all_tasks, create_task, delete_task, get_concrete_task
+)
 
 
 User = get_user_model()
@@ -67,6 +69,33 @@ class CreateTaskTests(TestCase):
     def test_create_with_incorrect_data(self):
         with self.assertRaises(ValidationError):
             create_task(self.user, {'something': 'something'})
+
+
+class GetConcreteTaskTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='testuser', password='testpass'
+        )
+        self.task = Task.objects.create(
+            title='some task', subtitle='some subtitle', text='some text',
+            owner=self.user
+        )
+
+    def test_get_concrete_with_user_author(self):
+        task = get_concrete_task(self.user, self.task.pk)
+        self.assertEqual(task, self.task)
+
+    def test_get_concrete_with_another_user(self):
+        new_user = User.objects.create_user(
+            username='newuser', password='testpass'
+        )
+        with self.assertRaises(Http404):
+            get_concrete_task(new_user, self.task.pk)
+
+    def test_get_concrete_with_anonymous_user(self):
+        with self.assertRaises(PermissionDenied):
+            get_concrete_task(AnonymousUser(), self.task.pk)
 
 
 class DeleteTaskTests(TestCase):
